@@ -1,0 +1,29 @@
+﻿@model dynamic
+
+@{
+    ViewBag.Title = "Users";
+}
+
+<h2>Users</h2>
+
+<div>
+    <span id="message"></span>
+</div>
+
+<input id="user-id" name="id" type="text" placeholder="id" />
+<input id="user-name" name="Name" type="text" placeholder="Name" />
+<input id="user-address" name="Address" type="text" placeholder="Address" />
+<div>
+    <ul class="list-inline list-unstyled">
+        <li><button id="Get">Get users</button></li>
+        <li><button id="Add">Add user</button></li>
+        <li><button id="Update">Update user</button></li>
+        <li><button id="Delete">Delete user</button></li>
+    </ul>
+</div>
+<ul id="users"></ul>
+
+@section scripts
+{
+    <script type="text/javascript" src="~/Scripts/Users/ButtonClickHandlers.js"></script>
+}

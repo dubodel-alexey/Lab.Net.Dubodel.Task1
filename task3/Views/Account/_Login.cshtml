@@ -1,0 +1,29 @@
+﻿@model task3.Models.LoginViewModel
+
+@using (Ajax.BeginForm("Login", "Account", new { returnUrl = Request.UrlReferrer.PathAndQuery }, new AjaxOptions
+{
+    OnSuccess = "RedirectToUrl",
+    OnFailure = "SetErrorMessageLoginForm",
+    HttpMethod = "POST"
+}, new { id = "login-form" }))
+{
+    <div>
+        @Html.ValidationSummary()
+    </div>
+    @Html.AntiForgeryToken();
+    @Html.LabelFor(x => x.Username)
+    <div>
+        @Html.EditorFor(x => x.Username)
+        @Html.ValidationMessageFor(x => x.Username)
+    </div>
+    @Html.LabelFor(x => x.Password)
+    <div>
+        @Html.EditorFor(x => x.Password)
+        @Html.ValidationMessageFor(x => x.Password)
+    </div>
+    <div>
+        @Html.EditorFor(x => x.RememberMe)
+        @Html.LabelFor(x => x.RememberMe)
+    </div>
+    <input type="submit" value="Log In" />
+}

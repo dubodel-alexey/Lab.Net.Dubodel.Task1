@@ -1,0 +1,33 @@
+﻿@model task3.Models.LoginViewModel
+
+@{
+    ViewBag.Title = "Login Page";
+}
+
+<h2>Login Page</h2>
+@{
+    var retUrl =
+        (Request.UrlReferrer != null ? Request.UrlReferrer.PathAndQuery : "");
+}
+@using (Html.BeginForm("Login", "Account", new { ReturnUrl = retUrl }))
+{
+    <div>
+        @Html.ValidationSummary()
+    </div>
+    @Html.AntiForgeryToken();
+    @Html.LabelFor(x => x.Username)
+    <div>
+        @Html.EditorFor(x => x.Username)
+        @Html.ValidationMessageFor(x => x.Username)
+    </div>
+    @Html.LabelFor(x => x.Password)
+    <div>
+        @Html.EditorFor(x => x.Password)
+        @Html.ValidationMessageFor(x => x.Password)
+    </div>
+    <div>
+        @Html.EditorFor(x => x.RememberMe)
+        @Html.LabelFor(x => x.RememberMe)
+    </div>
+    <input type="submit" value="Log In" />
+}

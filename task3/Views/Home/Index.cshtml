@@ -1,0 +1,132 @@
+﻿@using task3.Models
+@model CustomersViewModel
+@{
+    ViewBag.Title = "Index";
+}
+<div>
+    <h2>Contacts</h2>
+    <span>Page <span id="current">@Model.CurrentPage</span> of <span id="pages-count">@Model.PagesCount</span></span>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>FName</th>
+                <th>LName</th>
+                <th>Phone</th>
+            </tr>
+        </thead>
+        <tbody id="table-body">
+            @if (Model.Items != null)
+            {
+                foreach (var customer in Model.Items)
+                {
+                    <tr>
+                        <td>@customer["FName"]</td>
+                        <td>@customer["LName"]</td>
+                        <td>@customer["Phone"]</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+    <ul class="pager">
+        @{
+            if (Model.CurrentPage == 1)
+            {
+                <li id="previous-li" class="previous" style="display: none;"><a href="#" id="previous">Previous</a></li>
+            }
+            else
+            {
+                <li id="previous-li" class="previous"><a href='@Url.Action("Index", new { page = Model.CurrentPage - 1 })' id="previous">Previous</a></li>
+            }
+            if (Model.CurrentPage == Model.PagesCount)
+            {
+                <li id="next-li" class="next" style="display: none;"><a href="#" id="next">Next</a></li>
+            }
+            else
+            {
+                <li id="next-li" class="next"><a href='@Url.Action("Index", new { page = Model.CurrentPage + 1 })' id="next">Next</a></li>
+            }
+        }
+    </ul>
+    <h3>Comments</h3>
+    <ul id="comments">
+        @if (Model.CommentList != null)
+        {
+            foreach (var comment in Model.CommentList)
+            {
+                <li>@comment.Body</li>
+            }
+        }
+    </ul>
+    @{
+        CommentViewModel commentViewModel = Model.CommentView;
+    }
+    <div id="create-comment-form">
+        @{ Html.RenderPartial("_CreateComment", new ViewDataDictionary(commentViewModel));}
+    </div>
+</div>
+@section scripts
+{
+    <script>
+        $('#previous').click(function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+            var page = parseInt($('#current').text()) - 1;
+            getPage(page);
+        });
+
+        $('#next').click(function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+            var page = parseInt($('#current').text()) + 1;
+            getPage(page);
+        });
+
+        function getPage(page) {
+            var action = '@Url.Action("Index")';
+            $.ajax({
+                type: "POST",
+                url: action,
+                data: { 'page': page },
+                dataType: 'json',
+                success: function (data) {
+                    if (data.error) {
+                        noty({
+                            text: 'error occured',
+                            type: 'error',
+                            layout: 'topLeft',
+                            timeout: 3000,
+                            theme: 'relax'
+                        });
+                    } else {
+                        var newUrl = '@Url.Action("Index", new { page = -1 })';// '/Home/Index?page=-1';
+                        var body = "";
+                        $.each(data.Items, function (index, element) {
+                            body += ('<tr>');
+                            body += ('<td>' + element.FName + '</td>');
+                            body += ('<td>' + element.LName + '</td>');
+                            body += ('<td>' + element.Phone + '</td>');
+                            body += ('</tr>');
+                        });
+                        $("#table-body").html(body);
+                        $("#current").text(data.CurrentPage);
+                        $("#pages-count").text(data.PagesCount);
+                        if (data.CurrentPage == 1) {
+                            $('#previous-li').hide();
+                        } else {
+                            $('#previous-li').show();
+                            $('#previous').attr("href", newUrl.replace("-1", parseInt(data.CurrentPage) - 1));
+                        }
+                        if (data.CurrentPage == data.PagesCount) {
+                            $('#next-li').hide();
+                        } else {
+                            $('#next-li').show();
+                            $('#next').attr("href", newUrl.replace("-1", parseInt(data.CurrentPage) + 1));
+                        }
+                    }
+                }
+            });
+
+        }
+    </script>
+}

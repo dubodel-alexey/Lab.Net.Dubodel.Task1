@@ -1,0 +1,35 @@
+﻿@{
+    ViewBag.Title = "Sign Up Page";
+}
+
+<h2>SignUp</h2>
+@model task3.Models.SignUpViewModel
+
+@using (Html.BeginForm("SignUp", "Account"))
+{
+    <div>
+        @Html.ValidationSummary()
+    </div>
+    @Html.AntiForgeryToken();
+    @Html.LabelFor(x => x.Username)
+    <div>
+        @Html.EditorFor(x => x.Username)
+        @Html.ValidationMessageFor(x => x.Username)
+    </div>
+    @Html.LabelFor(x => x.Email)
+    <div>
+        @Html.EditorFor(x => x.Email)
+        @Html.ValidationMessageFor(x => x.Email)
+    </div>
+    @Html.LabelFor(x => x.Password)
+    <div>
+        @Html.EditorFor(x => x.Password)
+        @Html.ValidationMessageFor(x => x.Password)
+    </div>
+    @Html.LabelFor(x => x.ConfirmPassword)
+    <div>
+        @Html.EditorFor(x => x.ConfirmPassword)
+        @Html.ValidationMessageFor(x => x.ConfirmPassword)
+    </div>
+    <input type="submit" value="Sign Up" />
+}

@@ -1,0 +1,16 @@
+﻿@model task3.Models.CommentViewModel
+
+@using (Ajax.BeginForm("CreateComment", new AjaxOptions
+{
+    HttpMethod = "POST",
+    OnSuccess = "updateComments",
+    OnFailure = "validationResult"
+}))
+{
+    @Html.AntiForgeryToken();
+    <div>
+        @Html.TextAreaFor(x => x.Body, new { placeholder = "Remember, be nice!" })
+        @Html.ValidationMessageFor(x => x.Body)
+    </div>
+    <input type="submit" value="Leave Comment" />
+}

@@ -1,0 +1,103 @@
+﻿@using System.Web.Optimization
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/noty")
+    @*<script type="text/javascript" src="~/Scripts/bootstrap.min.js"></script>*@
+    <script type="text/javascript" src="~/Scripts/main.js"></script>
+    @*<link rel="stylesheet" href="~/Content/bootstrap.min.css">*@
+    <link rel="stylesheet" href="~/Content/main.css" />
+    @*<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/black-tie/jquery-ui.css" />*@
+    @Styles.Render("~/Content/themes/base/css")
+</head>
+<body>
+    <header>
+        <img src="~/Content/Images/logo2_0.png" />
+        <div>
+            <h1>Epam Systems</h1>
+            <h2>Lab Training</h2>
+        </div>
+    </header>
+
+    <nav id="nav">
+        <ul>
+            <li><a href="@Url.Action("Index", "Home")">Home</a></li>
+            <li><a href="@Url.Action("Index", "Users")">Users(restful client)</a></li>
+            <li>MENU</li>
+            <li>MENU</li>
+            <li>MENU</li>
+            <li>MENU</li>
+
+            @if (Request.IsAuthenticated)
+            {
+                <li class="right-nav"><a id="logout-button" href='@Url.Action("LogOut", "Account")'>Log Out</a></li>
+                <li class="right-nav">@User.Identity.Name</li>
+            }
+            else
+            {
+                <li class="right-nav"><a id="signup-button" href="@Url.Action("SignUp", "Account")">Sign Up</a></li>
+                <li class="right-nav"><a id="login-button" href="@Url.Action("Login", "Account")">Log In</a></li>
+            }
+        </ul>
+    </nav>
+    <div id="login-modal"></div>
+    <div id="signup-modal"></div>
+    <script>
+        $(document).ready(function () {
+            $('#login-button').click(function (e) {
+                e.stopPropagation();
+                e.preventDefault();
+                var loginModal = $('#login-modal');
+                if (loginModal.is(':empty')) {
+                    loginModal.load('@Url.Action("Login", "Account")', function () {
+                        jQuery('#login-modal').dialog('open');
+                    }); //('/Account/Login');
+                } else {
+                    $('#login-modal').dialog("open");
+                }
+            });
+
+            $('#signup-button').click(function (e) {
+                e.stopPropagation();
+                e.preventDefault();
+                var loginModal = $('#signup-modal');
+                if (loginModal.is(':empty')) {
+                    loginModal.load('@Url.Action("SignUp", "Account")', function () {
+                        $('#signup-modal').dialog("open");
+                    }); //('/Account/SignUp');
+                } else {
+                    $('#signup-modal').dialog("open");
+                }
+            });
+        });
+    </script>
+    <section>
+        <aside>
+            <nav id="aside-nav">
+                <ul>
+                    <li>MENU</li>
+                    <li>MENU</li>
+                    <li>MENU</li>
+                    <li>MENU</li>
+                    <li>MENU</li>
+                    <li>MENU</li>
+                    <li>MENU</li>
+                    <li>MENU</li>
+                    <li>MENU</li>
+                </ul>
+            </nav>
+        </aside>
+
+        <div id="content">
+            @RenderBody()
+        </div>
+    </section>
+    @RenderSection("scripts", required: false)
+</body>
+</html>
